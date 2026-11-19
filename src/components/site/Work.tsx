@@ -1,6 +1,9 @@
 import React, { useEffect, useRef, useState, useCallback } from "react";
 import { ArrowUpRight, Sparkles } from "lucide-react";
+import { motion } from "framer-motion";
 import { Reveal, SectionTitle } from "./primitives";
+import bottleToxic from "@/assets/bottle-toxic.png";
+import bottleHalls from "@/assets/bottle-halls.png";
 
 interface FlavorItem {
   id: string;
@@ -50,7 +53,7 @@ const FLAVORS_DATA: FlavorItem[] = [
       "Ультра-интенсивный взрывной профиль для поклонников выраженной кислотности. Мощный стартовый акцент яблока Гренни Смит переходит в лаймовый фреш и шипучий покалывающий шлейф.",
     notes: ["Кислое яблоко Гренни Смит", "Лаймовый фреш", "Шипучая карамель"],
     tags: ["Супер-насыщенность", "0% Диацетила", "Дозировка: 5–8%"],
-    bottle: "/bottle-green.png",
+    bottle: bottleToxic,
     accentColor: "#D9FF00",
     align: "left",
     palette: {
@@ -69,7 +72,7 @@ const FLAVORS_DATA: FlavorItem[] = [
       "Освежающая классика фармацевтического стандарта USP. Спелая дикая черника с безупречно чистым леденящим вдохом и благородными ментоловыми нотами, сохраняющими спирали и хлопок чистыми в 2.5 раза дольше.",
     notes: ["Лесная морозная черника", "Кристаллический ментол USP", "Арктический кулер"],
     tags: ["Кристаллический кулер", "USP Фармакопея", "Дозировка: 3–5%"],
-    bottle: "/bottle-blue.png",
+    bottle: bottleHalls,
     accentColor: "#38BDF8",
     align: "right",
     palette: {
@@ -386,88 +389,79 @@ function WebGLSquare({
 
 function FlavorRow({ item }: { item: FlavorItem }) {
   const [isHovered, setIsHovered] = useState(false);
-  const [imgSrc, setImgSrc] = useState(item.bottle);
-
   const isAlignRight = item.align === "right";
 
   return (
-    <div
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
-      className="group relative w-full flex flex-col items-center justify-center cursor-pointer"
-    >
-      {/* Row Container with Interactive Offset Physics */}
-      <div className="relative w-full max-w-5xl flex flex-col lg:flex-row items-center justify-center">
+    <div className="relative w-full max-w-5xl mx-auto">
+      {/* 2-Column Responsive Layout with Alternating Rhythm */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 items-center gap-10 sm:gap-14 lg:gap-16">
         {/* ========================================================
             THE SQUARE + PNG BOTTLE
            ======================================================== */}
-        <div
-          className={`relative z-20 w-full max-w-[340px] sm:max-w-[400px] lg:max-w-[440px] aspect-square transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+        <motion.div
+          initial={{ opacity: 0, x: isAlignRight ? 45 : -45, scale: 0.96 }}
+          whileInView={{ opacity: 1, x: 0, scale: 1 }}
+          viewport={{ once: true, margin: "-60px" }}
+          transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+          className={`relative z-20 w-full flex justify-center ${
             isAlignRight
-              ? isHovered
-                ? "lg:translate-x-32 sm:translate-y-[-4px]"
-                : "lg:translate-x-16"
-              : isHovered
-              ? "lg:-translate-x-32 sm:translate-y-[-4px]"
-              : "lg:-translate-x-16"
+              ? "order-1 lg:order-2 lg:justify-end"
+              : "order-1 lg:order-1 lg:justify-start"
           }`}
         >
-          {/* Living WebGL Shader Square */}
-          <WebGLSquare
-            palette={item.palette}
-            isHovered={isHovered}
-            onPointerEnter={() => setIsHovered(true)}
-            onPointerMove={() => setIsHovered(true)}
-            onPointerLeave={() => setIsHovered(false)}
-          />
-
-          {/* PNG Bottle positioned above the square with 3D overflow */}
-          <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-30">
-            <img
-              src={imgSrc}
-              alt={item.title}
-              onError={() => setImgSrc("/bottle-green.png")}
-              className={`h-[128%] max-h-[560px] w-auto object-contain transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] select-none ${
-                isHovered
-                  ? "scale-110 -translate-y-4 drop-shadow-[0_28px_40px_rgba(0,0,0,0.65)]"
-                  : "scale-100 translate-y-0 drop-shadow-[0_16px_28px_rgba(0,0,0,0.45)]"
-              }`}
+          <div
+            onMouseEnter={() => setIsHovered(true)}
+            onMouseLeave={() => setIsHovered(false)}
+            className="group relative w-full max-w-[340px] sm:max-w-[400px] lg:max-w-[440px] aspect-square transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] cursor-pointer"
+          >
+            {/* Living WebGL Shader Square */}
+            <WebGLSquare
+              palette={item.palette}
+              isHovered={isHovered}
+              onPointerEnter={() => setIsHovered(true)}
+              onPointerMove={() => setIsHovered(true)}
+              onPointerLeave={() => setIsHovered(false)}
             />
-          </div>
 
-          {/* Accent Badge on top of the square */}
-          <div className="absolute top-5 left-5 z-40 flex items-center gap-2 pointer-events-none">
-            <span className="font-mono text-xs font-bold px-3 py-1 rounded-full bg-black/40 backdrop-blur-md text-white border border-white/20">
-              {item.number}
-            </span>
+            {/* PNG Bottle positioned above the square with 3D overflow */}
+            <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-30">
+              <img
+                src={item.bottle}
+                alt={item.title}
+                className={`h-[128%] max-h-[560px] w-auto object-contain transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] select-none ${
+                  isHovered
+                    ? "scale-110 -translate-y-4 drop-shadow-[0_32px_44px_rgba(0,0,0,0.7)]"
+                    : "scale-100 translate-y-0 drop-shadow-[0_18px_30px_rgba(0,0,0,0.45)]"
+                }`}
+              />
+            </div>
+
+            {/* Accent Badge on top of the square */}
+            <div className="absolute top-5 left-5 z-40 flex items-center gap-2 pointer-events-none">
+              <span className="font-mono text-xs font-bold px-3 py-1 rounded-full bg-black/40 backdrop-blur-md text-white border border-white/20">
+                {item.number}
+              </span>
+            </div>
           </div>
-        </div>
+        </motion.div>
 
         {/* ========================================================
-            SLIDE-OUT FLAVOR DESCRIPTION
-            - Desktop: Slides out in the opposite direction
-            - Mobile: Sits neatly underneath the card
+            FLAVOR DESCRIPTION (Appears smoothly on scroll!)
            ======================================================== */}
-        <div
-          className={`w-full max-w-[360px] sm:max-w-[420px] lg:max-w-[380px] mt-8 lg:mt-0 transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+        <motion.div
+          initial={{ opacity: 0, x: isAlignRight ? -45 : 45, y: 15 }}
+          whileInView={{ opacity: 1, x: 0, y: 0 }}
+          viewport={{ once: true, margin: "-60px" }}
+          transition={{ duration: 0.8, delay: 0.15, ease: [0.16, 1, 0.3, 1] }}
+          className={`w-full max-w-[460px] mx-auto lg:mx-0 ${
             isAlignRight
-              ? // For right-aligned squares, text appears on the LEFT on desktop
-                `lg:absolute lg:left-4 xl:left-8 ${
-                  isHovered
-                    ? "lg:opacity-100 lg:translate-x-0"
-                    : "lg:opacity-0 lg:translate-x-12 lg:pointer-events-none"
-                }`
-              : // For left-aligned squares, text appears on the RIGHT on desktop
-                `lg:absolute lg:right-4 xl:right-8 ${
-                  isHovered
-                    ? "lg:opacity-100 lg:translate-x-0"
-                    : "lg:opacity-0 lg:-translate-x-12 lg:pointer-events-none"
-                }`
+              ? "order-2 lg:order-1 lg:pr-4"
+              : "order-2 lg:order-2 lg:pl-4"
           }`}
         >
-          <div className="p-4 sm:p-6 text-left">
+          <div className="p-2 sm:p-4 text-left">
             {/* Category tag */}
-            <div className="flex items-center gap-2 mb-2">
+            <div className="flex items-center gap-2 mb-3">
               <span
                 className="size-2 rounded-full"
                 style={{ backgroundColor: item.accentColor }}
@@ -478,33 +472,33 @@ function FlavorRow({ item }: { item: FlavorItem }) {
             </div>
 
             {/* Title */}
-            <h3 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-foreground mb-3">
+            <h3 className="text-3xl sm:text-4xl lg:text-[2.65rem] font-extrabold tracking-tight text-foreground mb-4 leading-[1.15]">
               {item.title}
             </h3>
 
             {/* Description */}
-            <p className="text-sm leading-relaxed text-muted-foreground mb-5">
+            <p className="text-sm sm:text-base leading-relaxed text-muted-foreground mb-6">
               {item.description}
             </p>
 
             {/* Flavor Notes */}
-            <div className="space-y-1.5 mb-5 pb-5 border-b border-border/60">
+            <div className="space-y-2 mb-6 pb-6 border-b border-border/60">
               <div className="text-xs font-mono uppercase text-muted-foreground/70 mb-2 font-semibold">
                 Вкусовая пирамида:
               </div>
               {item.notes.map((note, idx) => (
                 <div
                   key={idx}
-                  className="flex items-center gap-2 text-xs sm:text-sm font-medium text-foreground/90"
+                  className="flex items-center gap-2.5 text-xs sm:text-sm font-medium text-foreground/90"
                 >
-                  <Sparkles className="size-3 text-purple-500 shrink-0" />
+                  <Sparkles className="size-3.5 text-purple-500 shrink-0" />
                   <span>{note}</span>
                 </div>
               ))}
             </div>
 
             {/* Tags & Action */}
-            <div className="flex flex-wrap items-center gap-2">
+            <div className="flex flex-wrap items-center gap-2 mb-6">
               {item.tags.map((tag, idx) => (
                 <span
                   key={idx}
@@ -515,17 +509,17 @@ function FlavorRow({ item }: { item: FlavorItem }) {
               ))}
             </div>
 
-            <div className="mt-5">
+            <div>
               <a
                 href="#contact"
-                className="inline-flex items-center gap-2 text-xs font-bold text-foreground hover:text-purple-500 transition-colors"
+                className="inline-flex items-center gap-2 text-sm font-bold text-foreground hover:text-purple-500 transition-colors group/link"
               >
                 <span>Запросить рецептуру</span>
-                <ArrowUpRight className="size-3.5" />
+                <ArrowUpRight className="size-4 group-hover/link:translate-x-0.5 group-hover/link:-translate-y-0.5 transition-transform" />
               </a>
             </div>
           </div>
-        </div>
+        </motion.div>
       </div>
     </div>
   );
@@ -544,11 +538,9 @@ export function Work() {
         </Reveal>
 
         {/* Vertical Stack with Staggered Alternating Rhythm */}
-        <div className="mt-20 md:mt-28 flex flex-col gap-24 sm:gap-28 lg:gap-36">
+        <div className="mt-20 md:mt-28 flex flex-col gap-24 sm:gap-32 lg:gap-40">
           {FLAVORS_DATA.map((item) => (
-            <Reveal key={item.id} y={35}>
-              <FlavorRow item={item} />
-            </Reveal>
+            <FlavorRow key={item.id} item={item} />
           ))}
         </div>
       </div>
