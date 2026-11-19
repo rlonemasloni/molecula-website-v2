@@ -1,38 +1,28 @@
 import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { Moon, Sun } from "lucide-react";
-import heroMockup from "@/assets/hero-mockup.jpg";
-import p1 from "@/assets/project-1.jpg";
-import p2 from "@/assets/project-2.jpg";
-import p3 from "@/assets/project-3.jpg";
 
 const menuItems = [
   {
     label: "Главная",
     href: "#top",
-    image: heroMockup,
+    color: "#5D00FF",
   },
   {
     label: "Коллекции вкусов",
     href: "#flavors",
-    image: p1,
+    color: "#0284C7",
   },
   {
     label: "Вопросы и ответы",
     href: "#faq",
-    image: p2,
+    color: "#BE185D",
   },
   {
     label: "Связаться с нами",
     href: "#contact",
-    image: p3,
+    color: "#77B80F",
   },
-];
-
-const socialLinks = [
-  { label: "Telegram", href: "#contact" },
-  { label: "WhatsApp", href: "#contact" },
-  { label: "Запросить каталог", href: "#contact" },
 ];
 
 export function Nav() {
@@ -69,8 +59,8 @@ export function Nav() {
         animate={{
           opacity: 1,
           y: 0,
-          width: isOpen ? 390 : 120,
-          borderRadius: isOpen ? 24 : 18,
+          width: isOpen ? 340 : 120,
+          borderRadius: isOpen ? 22 : 18,
         }}
         transition={{
           duration: 0.4,
@@ -124,39 +114,18 @@ export function Nav() {
                     onClick={() => setIsOpen(false)}
                     className="group flex items-center justify-between border-t border-white/10 px-5 py-3.5 transition-colors hover:bg-white/[0.04]"
                   >
-                    <span className="text-[20px] font-medium tracking-tight text-white transition-transform duration-300 group-hover:translate-x-1">
+                    <span className="text-[17px] font-medium tracking-tight text-white transition-transform duration-300 group-hover:translate-x-1">
                       {item.label}
                     </span>
 
-                    <span className="relative h-14 w-20 shrink-0 overflow-hidden rounded-xl border border-white/10 bg-black">
-                      <img
-                        src={item.image}
-                        alt={item.label}
-                        className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
-                      />
-                    </span>
+                    {/* Colored rounded square instead of preview image */}
+                    <span
+                      className="size-6 rounded-lg shrink-0 border border-white/20 shadow-sm transition-transform duration-300 group-hover:scale-110"
+                      style={{ backgroundColor: item.color }}
+                    />
                   </a>
                 ))}
               </nav>
-
-              {/* Bottom Social Media / Contact section */}
-              <div className="border-t border-white/10 px-5 py-4">
-                <div className="mb-2.5 text-xs font-normal text-white/45">
-                  Связаться с нами
-                </div>
-                <div className="flex flex-col gap-1.5">
-                  {socialLinks.map((social) => (
-                    <a
-                      key={social.label}
-                      href={social.href}
-                      onClick={() => setIsOpen(false)}
-                      className="w-fit text-[15px] font-medium tracking-tight text-white transition-colors hover:text-[#C4B5FD]"
-                    >
-                      {social.label}
-                    </a>
-                  ))}
-                </div>
-              </div>
 
               {/* Theme Switcher at bottom of header */}
               <div className="border-t border-white/10 bg-white/[0.04] px-5 py-3.5 flex items-center justify-between">
@@ -182,7 +151,7 @@ export function Nav() {
                   type="button"
                   onClick={toggleTheme}
                   aria-label="Переключить тему оформления"
-                  className="flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-3.5 py-1.5 text-xs font-semibold tracking-tight text-white transition-all hover:bg-white/20 hover:border-white/30 active:scale-95"
+                  className="flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-3.5 py-1.5 text-xs font-semibold tracking-tight text-white transition-all hover:bg-white/20 hover:border-white/30 active:scale-95 cursor-pointer"
                 >
                   {theme === "dark" ? (
                     <>
@@ -204,4 +173,4 @@ export function Nav() {
     </header>
   );
 }
-
+export default Nav;
