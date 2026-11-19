@@ -52,7 +52,7 @@ export function Hero() {
               },
             },
           }}
-          className="mx-auto max-w-5xl text-center text-3xl leading-[1.2] font-bold tracking-tight sm:text-5xl sm:leading-[1.15] md:text-6xl md:leading-[1.1] lg:text-[4.25rem] lg:leading-[1.08]"
+          className="max-w-5xl text-left text-3xl leading-[1.2] font-bold tracking-tight sm:text-5xl sm:leading-[1.15] md:text-6xl md:leading-[1.1] lg:text-[4.25rem] lg:leading-[1.08]"
         >
           {HEADING_WORDS.map((word, i) => (
             <motion.span
