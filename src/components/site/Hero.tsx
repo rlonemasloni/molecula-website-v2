@@ -1,5 +1,6 @@
-import { motion } from "framer-motion";
+import { motion, useScroll, useTransform } from "framer-motion";
 import { useRef } from "react";
+import { MoleculaWordmark } from "./MoleculaWordmark";
 
 const HEADING_WORDS =
   "Создаем эталонные вкусовые профили на основе европейских пищевых компонентов.".split(
@@ -8,6 +9,11 @@ const HEADING_WORDS =
 
 export function Hero() {
   const ref = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ["start start", "end start"],
+  });
+  const wordmarkY = useTransform(scrollYProgress, [0, 1], [0, -40]);
 
   return (
     <section id="top" ref={ref} className="relative overflow-hidden pb-16 md:pb-24">
@@ -21,6 +27,17 @@ export function Hero() {
           className="absolute inset-0 w-full h-full object-cover pointer-events-none"
           src="/Moleculawebcu.mp4"
         />
+
+        {/* Foreground Wordmark (Full width edge-to-edge, flush to bottom, screen blend mode) */}
+        <motion.div
+          style={{ y: wordmarkY, mixBlendMode: "screen" }}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 1.0, ease: [0.22, 1, 0.36, 1] }}
+          className="relative z-10 w-full pointer-events-none px-0 pb-0 mb-0 leading-none mix-blend-screen"
+        >
+          <MoleculaWordmark variant="hero" className="w-full max-w-none block leading-none" />
+        </motion.div>
       </div>
 
       <div className="container-midu relative mt-24 md:mt-36">
