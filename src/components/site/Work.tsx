@@ -199,6 +199,7 @@ interface WebGLSquareProps {
   onPointerMove: (e: React.PointerEvent<HTMLDivElement>) => void;
   onPointerEnter: (e: React.PointerEvent<HTMLDivElement>) => void;
   onPointerLeave: () => void;
+  className?: string;
 }
 
 function WebGLSquare({
@@ -207,6 +208,7 @@ function WebGLSquare({
   onPointerMove,
   onPointerEnter,
   onPointerLeave,
+  className = "rounded-[2.25rem]",
 }: WebGLSquareProps) {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
@@ -370,7 +372,7 @@ function WebGLSquare({
       onPointerEnter={handleLocalPointerEnter}
       onPointerMove={handleLocalPointerMove}
       onPointerLeave={handleLocalPointerLeave}
-      className="absolute inset-0 w-full h-full overflow-hidden rounded-[2.25rem] bg-zinc-950"
+      className={`absolute inset-0 w-full h-full overflow-hidden bg-zinc-950 ${className}`}
     >
       <canvas
         ref={canvasRef}
@@ -381,7 +383,7 @@ function WebGLSquare({
         }`}
       />
       {/* Soft inner vignette overlay */}
-      <div className="absolute inset-0 pointer-events-none rounded-[2.25rem] ring-1 ring-inset ring-white/15" />
+      <div className={`absolute inset-0 pointer-events-none ring-1 ring-inset ring-white/15 ${className}`} />
     </div>
   );
 }
@@ -391,96 +393,130 @@ function FlavorRow({ item }: { item: FlavorItem }) {
   const isAlignRight = item.align === "right";
 
   return (
-    <div className="relative w-full max-w-5xl mx-auto">
-      {/* 2-Column Responsive Layout with Alternating Rhythm */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 items-center gap-10 sm:gap-14 lg:gap-16">
-        {/* ========================================================
-            THE SQUARE + PNG BOTTLE
-           ======================================================== */}
-        <motion.div
-          initial={{ opacity: 0, x: isAlignRight ? 45 : -45, scale: 0.96 }}
-          whileInView={{ opacity: 1, x: 0, scale: 1 }}
-          viewport={{ once: true, margin: "-60px" }}
-          transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-          className={`relative z-20 w-full flex justify-center ${
+    <div
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+      className="relative w-full overflow-hidden py-4 lg:py-6"
+    >
+      {/* ========================================================
+          DESKTOP FULL-BLEED GRADIENT RECTANGLE
+          Extends to the nearest edge of the screen!
+         ======================================================== */}
+      <motion.div
+        initial={{ opacity: 0, x: isAlignRight ? 60 : -60 }}
+        whileInView={{ opacity: 1, x: 0 }}
+        viewport={{ once: true, margin: "-60px" }}
+        transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+        className={`hidden lg:block absolute inset-y-4 lg:inset-y-6 z-0 pointer-events-auto ${
+          isAlignRight
+            ? "right-0 left-[calc(50%+1.5rem)]"
+            : "left-0 right-[calc(50%+1.5rem)]"
+        }`}
+      >
+        <WebGLSquare
+          palette={item.palette}
+          isHovered={isHovered}
+          onPointerEnter={() => setIsHovered(true)}
+          onPointerMove={() => setIsHovered(true)}
+          onPointerLeave={() => setIsHovered(false)}
+          className={
             isAlignRight
-              ? "order-1 lg:order-2 lg:justify-end"
-              : "order-1 lg:order-1 lg:justify-start"
-          }`}
-        >
-          <div
-            onMouseEnter={() => setIsHovered(true)}
-            onMouseLeave={() => setIsHovered(false)}
-            className="group relative w-full max-w-[340px] sm:max-w-[400px] lg:max-w-[440px] aspect-square transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] cursor-pointer"
+              ? "rounded-l-[2.75rem] rounded-r-none"
+              : "rounded-r-[2.75rem] rounded-l-none"
+          }
+        />
+      </motion.div>
+
+      {/* ========================================================
+          CONTENT CONTAINER (Centered max-w-5xl, PNG bottle in place)
+         ======================================================== */}
+      <div className="relative z-10 w-full max-w-5xl mx-auto px-4 sm:px-6">
+        <div className="grid grid-cols-1 lg:grid-cols-2 items-center gap-10 sm:gap-14 lg:gap-12 min-h-[440px] lg:min-h-[480px]">
+          {/* ========================================================
+              PNG BOTTLE SLOT (Stays in its exact grid column!)
+             ======================================================== */}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true, margin: "-60px" }}
+            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+            className={`relative z-20 w-full flex justify-center items-center ${
+              isAlignRight ? "order-1 lg:order-2" : "order-1 lg:order-1"
+            }`}
           >
-            {/* Living WebGL Shader Square */}
-            <WebGLSquare
-              palette={item.palette}
-              isHovered={isHovered}
-              onPointerEnter={() => setIsHovered(true)}
-              onPointerMove={() => setIsHovered(true)}
-              onPointerLeave={() => setIsHovered(false)}
-            />
+            <div className="group relative w-full max-w-[340px] sm:max-w-[400px] lg:max-w-[440px] aspect-square flex items-center justify-center cursor-pointer">
+              {/* Mobile-only background square (desktop uses bleed background) */}
+              <div className="lg:hidden absolute inset-0 rounded-[2.25rem] overflow-hidden">
+                <WebGLSquare
+                  palette={item.palette}
+                  isHovered={isHovered}
+                  onPointerEnter={() => setIsHovered(true)}
+                  onPointerMove={() => setIsHovered(true)}
+                  onPointerLeave={() => setIsHovered(false)}
+                  className="rounded-[2.25rem]"
+                />
+              </div>
 
-            {/* PNG Bottle positioned above the square with 3D overflow */}
-            <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-30">
-              <img
-                src={item.bottle}
-                alt={item.title}
-                className={`h-[128%] max-h-[560px] w-auto object-contain transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] select-none ${
-                  isHovered
-                    ? "scale-110 -translate-y-4 drop-shadow-[0_32px_44px_rgba(0,0,0,0.7)]"
-                    : "scale-100 translate-y-0 drop-shadow-[0_18px_30px_rgba(0,0,0,0.45)]"
-                }`}
-              />
+              {/* PNG Bottle positioned above with 3D overflow */}
+              <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-30">
+                <img
+                  src={item.bottle}
+                  alt={item.title}
+                  className={`h-[128%] max-h-[560px] w-auto object-contain transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] select-none ${
+                    isHovered
+                      ? "scale-110 -translate-y-4 drop-shadow-[0_32px_44px_rgba(0,0,0,0.7)]"
+                      : "scale-100 translate-y-0 drop-shadow-[0_18px_30px_rgba(0,0,0,0.45)]"
+                  }`}
+                />
+              </div>
+
+              {/* Accent Badge on top of the bottle area */}
+              <div className="absolute top-5 left-5 z-40 flex items-center gap-2 pointer-events-none">
+                <span className="font-mono text-xs font-bold px-3 py-1 rounded-full bg-black/40 backdrop-blur-md text-white border border-white/20">
+                  {item.number}
+                </span>
+              </div>
             </div>
+          </motion.div>
 
-            {/* Accent Badge on top of the square */}
-            <div className="absolute top-5 left-5 z-40 flex items-center gap-2 pointer-events-none">
-              <span className="font-mono text-xs font-bold px-3 py-1 rounded-full bg-black/40 backdrop-blur-md text-white border border-white/20">
-                {item.number}
-              </span>
+          {/* ========================================================
+              FLAVOR DESCRIPTION (Appears smoothly on scroll!)
+             ======================================================== */}
+          <motion.div
+            initial={{ opacity: 0, x: isAlignRight ? -45 : 45, y: 15 }}
+            whileInView={{ opacity: 1, x: 0, y: 0 }}
+            viewport={{ once: true, margin: "-60px" }}
+            transition={{ duration: 0.8, delay: 0.15, ease: [0.16, 1, 0.3, 1] }}
+            className={`w-full max-w-[460px] mx-auto lg:mx-0 ${
+              isAlignRight
+                ? "order-2 lg:order-1 lg:pr-4"
+                : "order-2 lg:order-2 lg:pl-4"
+            }`}
+          >
+            <div className="p-2 sm:p-4 text-left">
+              {/* Category tag */}
+              <div className="flex items-center gap-2 mb-3">
+                <span
+                  className="size-2 rounded-full"
+                  style={{ backgroundColor: item.accentColor }}
+                />
+                <span className="font-mono text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                  {item.category}
+                </span>
+              </div>
+
+              {/* Title */}
+              <h3 className="text-3xl sm:text-4xl lg:text-[2.65rem] font-extrabold tracking-tight text-foreground mb-4 leading-[1.15]">
+                {item.title}
+              </h3>
+
+              {/* Description */}
+              <p className="text-sm sm:text-base leading-relaxed text-muted-foreground">
+                {item.description}
+              </p>
             </div>
-          </div>
-        </motion.div>
-
-        {/* ========================================================
-            FLAVOR DESCRIPTION (Appears smoothly on scroll!)
-           ======================================================== */}
-        <motion.div
-          initial={{ opacity: 0, x: isAlignRight ? -45 : 45, y: 15 }}
-          whileInView={{ opacity: 1, x: 0, y: 0 }}
-          viewport={{ once: true, margin: "-60px" }}
-          transition={{ duration: 0.8, delay: 0.15, ease: [0.16, 1, 0.3, 1] }}
-          className={`w-full max-w-[460px] mx-auto lg:mx-0 ${
-            isAlignRight
-              ? "order-2 lg:order-1 lg:pr-4"
-              : "order-2 lg:order-2 lg:pl-4"
-          }`}
-        >
-          <div className="p-2 sm:p-4 text-left">
-            {/* Category tag */}
-            <div className="flex items-center gap-2 mb-3">
-              <span
-                className="size-2 rounded-full"
-                style={{ backgroundColor: item.accentColor }}
-              />
-              <span className="font-mono text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-                {item.category}
-              </span>
-            </div>
-
-            {/* Title */}
-            <h3 className="text-3xl sm:text-4xl lg:text-[2.65rem] font-extrabold tracking-tight text-foreground mb-4 leading-[1.15]">
-              {item.title}
-            </h3>
-
-            {/* Description */}
-            <p className="text-sm sm:text-base leading-relaxed text-muted-foreground">
-              {item.description}
-            </p>
-          </div>
-        </motion.div>
+          </motion.div>
+        </div>
       </div>
     </div>
   );
@@ -488,7 +524,7 @@ function FlavorRow({ item }: { item: FlavorItem }) {
 
 export function Work() {
   return (
-    <section id="flavors" className="py-24 md:py-36 overflow-hidden">
+    <section id="flavors" className="py-24 md:py-36 overflow-hidden relative">
       <div className="container-midu">
         {/* Section Header */}
         <Reveal>
@@ -497,13 +533,13 @@ export function Work() {
             trail="Флагманские линейки чистой вкусопередачи."
           />
         </Reveal>
+      </div>
 
-        {/* Vertical Stack with Staggered Alternating Rhythm */}
-        <div className="mt-20 md:mt-28 flex flex-col gap-24 sm:gap-32 lg:gap-40">
-          {FLAVORS_DATA.map((item) => (
-            <FlavorRow key={item.id} item={item} />
-          ))}
-        </div>
+      {/* Vertical Stack with Staggered Alternating Rhythm and Bleed Edges */}
+      <div className="mt-20 md:mt-28 flex flex-col gap-24 sm:gap-32 lg:gap-36 w-full">
+        {FLAVORS_DATA.map((item) => (
+          <FlavorRow key={item.id} item={item} />
+        ))}
       </div>
     </section>
   );
