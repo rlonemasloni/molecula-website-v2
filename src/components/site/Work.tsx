@@ -1,30 +1,82 @@
 import React, { useEffect, useRef, useState, useCallback } from "react";
+import { ArrowUpRight, Sparkles } from "lucide-react";
 import { Reveal, SectionTitle } from "./primitives";
 
-interface CardPalette {
-  colorDeep: string;
-  colorMid: string;
-  colorHighlight: string;
+interface FlavorItem {
+  id: string;
+  number: string;
+  title: string;
+  category: string;
+  description: string;
+  notes: string[];
+  tags: string[];
+  bottle: string;
+  accentColor: string;
+  align: "right" | "left";
+  palette: {
+    colorDeep: string;
+    colorMid: string;
+    colorHighlight: string;
+  };
 }
 
-const CARDS_DATA: CardPalette[] = [
-  // 1: Синий (ледяной сине-голубой с мягким розовым бликом)
+const FLAVORS_DATA: FlavorItem[] = [
+  // 1: Красная линейка (смещена вправо)
   {
-    colorDeep: "#0284c7",
-    colorMid: "#38bdf8",
-    colorHighlight: "#f472b6",
+    id: "lego-go",
+    number: "01",
+    title: "ЛЕГО ГО",
+    category: "Модульный ягодный концентрат",
+    description:
+      "Линейка-конструктор премиального уровня с выверенной сладостью и кристальной чистотой. Спелая земляника, лесная ежевика и сочный тропический ананас с мягкой цитрусовой кислинкой.",
+    notes: ["Спелая земляника", "Лесная ежевика", "Тропический ананас"],
+    tags: ["0% Никотина", "USP Стандарт", "Дозировка: 4–6%"],
+    bottle: "/bottle-red.png",
+    accentColor: "#F43F5E",
+    align: "right",
+    palette: {
+      colorDeep: "#9f1239",
+      colorMid: "#f43f5e",
+      colorHighlight: "#ffe4e6",
+    },
   },
-  // 2: Красный (ярко-малиновый / розовый с белым свечением)
+  // 2: Зелёная линейка (смещена влево)
   {
-    colorDeep: "#be185d",
-    colorMid: "#f43f5e",
-    colorHighlight: "#ffffff",
+    id: "toxic",
+    number: "02",
+    title: "ТОКСИК",
+    category: "Экстремально кислый яблочно-цитрусовый профиль",
+    description:
+      "Ультра-интенсивный взрывной профиль для поклонников выраженной кислотности. Мощный стартовый акцент яблока Гренни Смит переходит в лаймовый фреш и шипучий покалывающий шлейф.",
+    notes: ["Кислое яблоко Гренни Смит", "Лаймовый фреш", "Шипучая карамель"],
+    tags: ["Супер-насыщенность", "0% Диацетила", "Дозировка: 5–8%"],
+    bottle: "/bottle-green.png",
+    accentColor: "#D9FF00",
+    align: "left",
+    palette: {
+      colorDeep: "#65a30d",
+      colorMid: "#d9ff00",
+      colorHighlight: "#ffffff",
+    },
   },
-  // 3: Салатовый (лаймово-неоновый в фирменных цветах MOLECULA #d9ff00 / #77b80f)
+  // 3: Синяя линейка (смещена вправо, на одной оси с 1-й)
   {
-    colorDeep: "#77b80f",
-    colorMid: "#d9ff00",
-    colorHighlight: "#ffffff",
+    id: "halls",
+    number: "03",
+    title: "ХОЛС",
+    category: "Ледяной арктический ментол и горный эвкалипт",
+    description:
+      "Освежающая классика фармацевтического стандарта USP. Безупречно чистый леденящий вдох с благородными нотами дикого эвкалипта, сохраняющий спирали и хлопок чистыми в 2.5 раза дольше.",
+    notes: ["Кристаллический ментол USP", "Горный эвкалипт", "Арктический кулер"],
+    tags: ["Кристаллический кулер", "USP Фармакопея", "Дозировка: 3–5%"],
+    bottle: "/bottle-blue.png",
+    accentColor: "#38BDF8",
+    align: "right",
+    palette: {
+      colorDeep: "#0369a1",
+      colorMid: "#38bdf8",
+      colorHighlight: "#fbcfe8",
+    },
   },
 ];
 
@@ -79,21 +131,21 @@ const FRAGMENT_SHADER = `
   void main() {
     vec2 uv = v_uv;
     vec2 st = uv;
-    float t = u_time * 0.55;
+    float t = u_time * 0.5;
 
     // Fluid distortion around mouse cursor
     vec2 mDelta = st - u_mouse;
     float mDist = length(mDelta);
-    float mStrength = exp(-mDist * 3.6) * u_mouseActive;
-    vec2 mPush = normalize(mDelta + vec2(0.0001)) * mStrength * 0.42;
+    float mStrength = exp(-mDist * 3.8) * u_mouseActive;
+    vec2 mPush = normalize(mDelta + vec2(0.0001)) * mStrength * 0.4;
 
-    // Upward flow ascent + interactive mouse ripple push
-    vec2 upDrift = vec2(sin(t * 0.6 + uv.y * 3.2) * 0.07, -t * 0.85) + mPush;
+    // Upward organic ascent vector + cursor push
+    vec2 upDrift = vec2(sin(t * 0.6 + uv.y * 3.0) * 0.07, -t * 0.8) + mPush;
 
     // Multi-stage domain warping
     vec2 q = vec2(
-      fbm(st * 1.8 + upDrift * 0.72),
-      fbm(st * 1.8 + upDrift * 0.82 + vec2(5.2, 1.3))
+      fbm(st * 1.8 + upDrift * 0.7),
+      fbm(st * 1.8 + upDrift * 0.8 + vec2(5.2, 1.3))
     );
 
     vec2 r = vec2(
@@ -115,8 +167,8 @@ const FRAGMENT_SHADER = `
     float cursorGlow = exp(-mDist * 2.6) * 0.38 * u_mouseActive;
     col = mix(col, u_colorHighlight, cursorGlow);
 
-    // Rich contrast polish
-    col = clamp((col - 0.5) * 1.06 + 0.5, 0.0, 1.0);
+    // Clean contrast
+    col = clamp((col - 0.5) * 1.05 + 0.5, 0.0, 1.0);
 
     gl_FragColor = vec4(col, 1.0);
   }
@@ -139,39 +191,38 @@ function parseColor(hex: string): [number, number, number] {
   ];
 }
 
-interface InteractiveCardProps {
-  palette: CardPalette;
+interface WebGLSquareProps {
+  palette: FlavorItem["palette"];
+  isHovered: boolean;
+  onPointerMove: (e: React.PointerEvent<HTMLDivElement>) => void;
+  onPointerEnter: (e: React.PointerEvent<HTMLDivElement>) => void;
+  onPointerLeave: () => void;
 }
 
-function InteractiveCard({ palette }: InteractiveCardProps) {
+function WebGLSquare({
+  palette,
+  isHovered,
+  onPointerMove,
+  onPointerEnter,
+  onPointerLeave,
+}: WebGLSquareProps) {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
-  const [isHovered, setIsHovered] = useState(false);
-  const isRunningRef = useRef(false);
-  const animFrameRef = useRef<number | null>(null);
-  const stopTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-
-  // Mouse coordinates with smooth Lerp inertia
   const targetMouseRef = useRef({ x: 0.5, y: 0.5 });
   const currentMouseRef = useRef({ x: 0.5, y: 0.5 });
   const mouseActiveRef = useRef(0.0);
 
-  // WebGL context & uniform locations cache
   const glRef = useRef<WebGLRenderingContext | null>(null);
-  const programRef = useRef<WebGLProgram | null>(null);
   const uniformsRef = useRef<{
     uRes: WebGLUniformLocation | null;
     uTime: WebGLUniformLocation | null;
     uMouse: WebGLUniformLocation | null;
     uMouseActive: WebGLUniformLocation | null;
-    uDeep: WebGLUniformLocation | null;
-    uMid: WebGLUniformLocation | null;
-    uHighlight: WebGLUniformLocation | null;
   } | null>(null);
   const startTimeRef = useRef(performance.now());
+  const animFrameRef = useRef<number | null>(null);
 
-  // Initialize WebGL once
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -186,20 +237,16 @@ function InteractiveCard({ palette }: InteractiveCardProps) {
     if (!gl) return;
     glRef.current = gl;
 
-    const compileShader = (type: number, src: string) => {
+    const compile = (type: number, src: string) => {
       const s = gl.createShader(type);
       if (!s) return null;
       gl.shaderSource(s, src);
       gl.compileShader(s);
-      if (!gl.getShaderParameter(s, gl.COMPILE_STATUS)) {
-        gl.deleteShader(s);
-        return null;
-      }
       return s;
     };
 
-    const vs = compileShader(gl.VERTEX_SHADER, VERTEX_SHADER);
-    const fs = compileShader(gl.FRAGMENT_SHADER, FRAGMENT_SHADER);
+    const vs = compile(gl.VERTEX_SHADER, VERTEX_SHADER);
+    const fs = compile(gl.FRAGMENT_SHADER, FRAGMENT_SHADER);
     if (!vs || !fs) return;
 
     const program = gl.createProgram();
@@ -207,12 +254,8 @@ function InteractiveCard({ palette }: InteractiveCardProps) {
     gl.attachShader(program, vs);
     gl.attachShader(program, fs);
     gl.linkProgram(program);
-    if (!gl.getProgramParameter(program, gl.LINK_STATUS)) return;
-
-    programRef.current = program;
     gl.useProgram(program);
 
-    // Quad buffer
     const buf = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, buf);
     gl.bufferData(
@@ -225,29 +268,63 @@ function InteractiveCard({ palette }: InteractiveCardProps) {
     gl.enableVertexAttribArray(aPos);
     gl.vertexAttribPointer(aPos, 2, gl.FLOAT, false, 0, 0);
 
-    // Cache uniforms
-    uniformsRef.current = {
-      uRes: gl.getUniformLocation(program, "u_resolution"),
-      uTime: gl.getUniformLocation(program, "u_time"),
-      uMouse: gl.getUniformLocation(program, "u_mouse"),
-      uMouseActive: gl.getUniformLocation(program, "u_mouseActive"),
-      uDeep: gl.getUniformLocation(program, "u_colorDeep"),
-      uMid: gl.getUniformLocation(program, "u_colorMid"),
-      uHighlight: gl.getUniformLocation(program, "u_colorHighlight"),
-    };
+    const uRes = gl.getUniformLocation(program, "u_resolution");
+    const uTime = gl.getUniformLocation(program, "u_time");
+    const uMouse = gl.getUniformLocation(program, "u_mouse");
+    const uMouseActive = gl.getUniformLocation(program, "u_mouseActive");
+    const uDeep = gl.getUniformLocation(program, "u_colorDeep");
+    const uMid = gl.getUniformLocation(program, "u_colorMid");
+    const uHighlight = gl.getUniformLocation(program, "u_colorHighlight");
+
+    uniformsRef.current = { uRes, uTime, uMouse, uMouseActive };
 
     const rgbDeep = parseColor(palette.colorDeep);
     const rgbMid = parseColor(palette.colorMid);
     const rgbHighlight = parseColor(palette.colorHighlight);
 
-    gl.uniform3f(uniformsRef.current.uDeep, rgbDeep[0], rgbDeep[1], rgbDeep[2]);
-    gl.uniform3f(uniformsRef.current.uMid, rgbMid[0], rgbMid[1], rgbMid[2]);
-    gl.uniform3f(
-      uniformsRef.current.uHighlight,
-      rgbHighlight[0],
-      rgbHighlight[1],
-      rgbHighlight[2]
-    );
+    gl.uniform3f(uDeep, rgbDeep[0], rgbDeep[1], rgbDeep[2]);
+    gl.uniform3f(uMid, rgbMid[0], rgbMid[1], rgbMid[2]);
+    gl.uniform3f(uHighlight, rgbHighlight[0], rgbHighlight[1], rgbHighlight[2]);
+
+    const render = (now: number) => {
+      const c = canvasRef.current;
+      const cnt = containerRef.current;
+      const u = uniformsRef.current;
+      if (gl && c && cnt && u) {
+        const rect = cnt.getBoundingClientRect();
+        const dpr = Math.min(window.devicePixelRatio || 1, 2);
+        const w = Math.round(rect.width * dpr);
+        const h = Math.round(rect.height * dpr);
+
+        if (w > 0 && h > 0 && (c.width !== w || c.height !== h)) {
+          c.width = w;
+          c.height = h;
+          gl.viewport(0, 0, w, h);
+          if (u.uRes) gl.uniform2f(u.uRes, w, h);
+        }
+
+        currentMouseRef.current.x +=
+          (targetMouseRef.current.x - currentMouseRef.current.x) * 0.08;
+        currentMouseRef.current.y +=
+          (targetMouseRef.current.y - currentMouseRef.current.y) * 0.08;
+
+        const elapsed = (now - startTimeRef.current) * 0.001;
+        if (u.uTime) gl.uniform1f(u.uTime, elapsed);
+        if (u.uMouse)
+          gl.uniform2f(
+            u.uMouse,
+            currentMouseRef.current.x,
+            currentMouseRef.current.y
+          );
+        if (u.uMouseActive)
+          gl.uniform1f(u.uMouseActive, mouseActiveRef.current);
+
+        gl.drawArrays(gl.TRIANGLES, 0, 6);
+      }
+      animFrameRef.current = requestAnimationFrame(render);
+    };
+
+    animFrameRef.current = requestAnimationFrame(render);
 
     return () => {
       if (animFrameRef.current) cancelAnimationFrame(animFrameRef.current);
@@ -258,125 +335,197 @@ function InteractiveCard({ palette }: InteractiveCardProps) {
     };
   }, [palette]);
 
-  // Render loop, running ONLY when active / fading out
-  const startAnimation = useCallback(() => {
-    if (isRunningRef.current) return;
-    isRunningRef.current = true;
-
-    const render = (now: number) => {
-      const gl = glRef.current;
-      const canvas = canvasRef.current;
-      const container = containerRef.current;
-      const uniforms = uniformsRef.current;
-
-      if (gl && canvas && container && uniforms) {
-        // Resize viewport
-        const rect = container.getBoundingClientRect();
-        const dpr = Math.min(window.devicePixelRatio || 1, 2);
-        const w = Math.round(rect.width * dpr);
-        const h = Math.round(rect.height * dpr);
-
-        if (w > 0 && h > 0 && (canvas.width !== w || canvas.height !== h)) {
-          canvas.width = w;
-          canvas.height = h;
-          gl.viewport(0, 0, w, h);
-          if (uniforms.uRes) gl.uniform2f(uniforms.uRes, w, h);
-        }
-
-        // Smooth Lerp for cursor position
-        currentMouseRef.current.x +=
-          (targetMouseRef.current.x - currentMouseRef.current.x) * 0.08;
-        currentMouseRef.current.y +=
-          (targetMouseRef.current.y - currentMouseRef.current.y) * 0.08;
-
-        const elapsed = (now - startTimeRef.current) * 0.001;
-        if (uniforms.uTime) gl.uniform1f(uniforms.uTime, elapsed);
-        if (uniforms.uMouse)
-          gl.uniform2f(
-            uniforms.uMouse,
-            currentMouseRef.current.x,
-            currentMouseRef.current.y
-          );
-        if (uniforms.uMouseActive)
-          gl.uniform1f(uniforms.uMouseActive, mouseActiveRef.current);
-
-        gl.drawArrays(gl.TRIANGLES, 0, 6);
-      }
-
-      if (isRunningRef.current) {
-        animFrameRef.current = requestAnimationFrame(render);
-      }
-    };
-
-    animFrameRef.current = requestAnimationFrame(render);
-  }, []);
-
-  const stopAnimation = useCallback(() => {
-    isRunningRef.current = false;
-    if (animFrameRef.current) {
-      cancelAnimationFrame(animFrameRef.current);
-      animFrameRef.current = null;
-    }
-  }, []);
-
-  const handlePointerEnter = (e: React.PointerEvent<HTMLDivElement>) => {
-    if (stopTimeoutRef.current) {
-      clearTimeout(stopTimeoutRef.current);
-      stopTimeoutRef.current = null;
-    }
+  const handleLocalPointerEnter = (e: React.PointerEvent<HTMLDivElement>) => {
     const rect = e.currentTarget.getBoundingClientRect();
     const x = (e.clientX - rect.left) / rect.width;
     const y = 1.0 - (e.clientY - rect.top) / rect.height;
-
     targetMouseRef.current = { x, y };
     currentMouseRef.current = { x, y };
     mouseActiveRef.current = 1.0;
-
-    setIsHovered(true);
-    startAnimation();
+    onPointerEnter(e);
   };
 
-  const handlePointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
+  const handleLocalPointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
     const rect = e.currentTarget.getBoundingClientRect();
     const x = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
     const y = Math.max(
       0,
       Math.min(1, 1.0 - (e.clientY - rect.top) / rect.height)
     );
-
     targetMouseRef.current = { x, y };
     mouseActiveRef.current = 1.0;
+    onPointerMove(e);
   };
 
-  const handlePointerLeave = () => {
-    setIsHovered(false);
+  const handleLocalPointerLeave = () => {
     mouseActiveRef.current = 0.0;
-
-    // Pause WebGL rendering after 600ms once CSS fade-out finishes
-    if (stopTimeoutRef.current) clearTimeout(stopTimeoutRef.current);
-    stopTimeoutRef.current = setTimeout(() => {
-      stopAnimation();
-    }, 600);
+    onPointerLeave();
   };
 
   return (
     <div
       ref={containerRef}
-      onPointerEnter={handlePointerEnter}
-      onPointerMove={handlePointerMove}
-      onPointerLeave={handlePointerLeave}
-      className="relative aspect-square w-full bg-white select-none overflow-hidden cursor-pointer"
+      onPointerEnter={handleLocalPointerEnter}
+      onPointerMove={handleLocalPointerMove}
+      onPointerLeave={handleLocalPointerLeave}
+      className="absolute inset-0 w-full h-full overflow-hidden rounded-[2.25rem] bg-zinc-950"
     >
-      {/* Liquid WebGL Canvas with smooth 500ms opacity transition */}
-      <div
-        className={`absolute inset-0 w-full h-full transition-opacity duration-500 ease-out ${
-          isHovered ? "opacity-100" : "opacity-0 pointer-events-none"
+      <canvas
+        ref={canvasRef}
+        className={`absolute inset-0 w-full h-full block pointer-events-none transition-all duration-700 ease-out ${
+          isHovered
+            ? "opacity-100 scale-[1.03] filter brightness-110"
+            : "opacity-85 scale-100 filter brightness-95"
         }`}
-      >
-        <canvas
-          ref={canvasRef}
-          className="absolute inset-0 w-full h-full block pointer-events-none"
-        />
+      />
+      {/* Soft inner vignette overlay */}
+      <div className="absolute inset-0 pointer-events-none rounded-[2.25rem] ring-1 ring-inset ring-white/15" />
+    </div>
+  );
+}
+
+function FlavorRow({ item }: { item: FlavorItem }) {
+  const [isHovered, setIsHovered] = useState(false);
+  const [imgSrc, setImgSrc] = useState(item.bottle);
+
+  const isAlignRight = item.align === "right";
+
+  return (
+    <div
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+      className="group relative w-full flex flex-col items-center justify-center cursor-pointer"
+    >
+      {/* Row Container with Interactive Offset Physics */}
+      <div className="relative w-full max-w-5xl flex flex-col lg:flex-row items-center justify-center">
+        {/* ========================================================
+            THE SQUARE + PNG BOTTLE
+           ======================================================== */}
+        <div
+          className={`relative z-20 w-full max-w-[340px] sm:max-w-[400px] lg:max-w-[440px] aspect-square transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+            isAlignRight
+              ? isHovered
+                ? "lg:translate-x-32 sm:translate-y-[-4px]"
+                : "lg:translate-x-16"
+              : isHovered
+              ? "lg:-translate-x-32 sm:translate-y-[-4px]"
+              : "lg:-translate-x-16"
+          }`}
+        >
+          {/* Living WebGL Shader Square */}
+          <WebGLSquare
+            palette={item.palette}
+            isHovered={isHovered}
+            onPointerEnter={() => setIsHovered(true)}
+            onPointerMove={() => setIsHovered(true)}
+            onPointerLeave={() => setIsHovered(false)}
+          />
+
+          {/* PNG Bottle positioned above the square with 3D overflow */}
+          <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-30">
+            <img
+              src={imgSrc}
+              alt={item.title}
+              onError={() => setImgSrc("/bottle-green.png")}
+              className={`h-[128%] max-h-[560px] w-auto object-contain transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] select-none ${
+                isHovered
+                  ? "scale-110 -translate-y-4 drop-shadow-[0_28px_40px_rgba(0,0,0,0.65)]"
+                  : "scale-100 translate-y-0 drop-shadow-[0_16px_28px_rgba(0,0,0,0.45)]"
+              }`}
+            />
+          </div>
+
+          {/* Accent Badge on top of the square */}
+          <div className="absolute top-5 left-5 z-40 flex items-center gap-2 pointer-events-none">
+            <span className="font-mono text-xs font-bold px-3 py-1 rounded-full bg-black/40 backdrop-blur-md text-white border border-white/20">
+              {item.number}
+            </span>
+          </div>
+        </div>
+
+        {/* ========================================================
+            SLIDE-OUT FLAVOR DESCRIPTION
+            - Desktop: Slides out in the opposite direction
+            - Mobile: Sits neatly underneath the card
+           ======================================================== */}
+        <div
+          className={`w-full max-w-[360px] sm:max-w-[420px] lg:max-w-[380px] mt-8 lg:mt-0 transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+            isAlignRight
+              ? // For right-aligned squares, text appears on the LEFT on desktop
+                `lg:absolute lg:left-4 xl:left-8 ${
+                  isHovered
+                    ? "lg:opacity-100 lg:translate-x-0"
+                    : "lg:opacity-0 lg:translate-x-12 lg:pointer-events-none"
+                }`
+              : // For left-aligned squares, text appears on the RIGHT on desktop
+                `lg:absolute lg:right-4 xl:right-8 ${
+                  isHovered
+                    ? "lg:opacity-100 lg:translate-x-0"
+                    : "lg:opacity-0 lg:-translate-x-12 lg:pointer-events-none"
+                }`
+          }`}
+        >
+          <div className="p-4 sm:p-6 text-left">
+            {/* Category tag */}
+            <div className="flex items-center gap-2 mb-2">
+              <span
+                className="size-2 rounded-full"
+                style={{ backgroundColor: item.accentColor }}
+              />
+              <span className="font-mono text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                {item.category}
+              </span>
+            </div>
+
+            {/* Title */}
+            <h3 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-foreground mb-3">
+              {item.title}
+            </h3>
+
+            {/* Description */}
+            <p className="text-sm leading-relaxed text-muted-foreground mb-5">
+              {item.description}
+            </p>
+
+            {/* Flavor Notes */}
+            <div className="space-y-1.5 mb-5 pb-5 border-b border-border/60">
+              <div className="text-xs font-mono uppercase text-muted-foreground/70 mb-2 font-semibold">
+                Вкусовая пирамида:
+              </div>
+              {item.notes.map((note, idx) => (
+                <div
+                  key={idx}
+                  className="flex items-center gap-2 text-xs sm:text-sm font-medium text-foreground/90"
+                >
+                  <Sparkles className="size-3 text-purple-500 shrink-0" />
+                  <span>{note}</span>
+                </div>
+              ))}
+            </div>
+
+            {/* Tags & Action */}
+            <div className="flex flex-wrap items-center gap-2">
+              {item.tags.map((tag, idx) => (
+                <span
+                  key={idx}
+                  className="px-2.5 py-1 rounded-md bg-secondary/80 text-[11px] font-mono text-secondary-foreground border border-border/40"
+                >
+                  {tag}
+                </span>
+              ))}
+            </div>
+
+            <div className="mt-5">
+              <a
+                href="#contact"
+                className="inline-flex items-center gap-2 text-xs font-bold text-foreground hover:text-purple-500 transition-colors"
+              >
+                <span>Запросить рецептуру</span>
+                <ArrowUpRight className="size-3.5" />
+              </a>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );
@@ -384,7 +533,7 @@ function InteractiveCard({ palette }: InteractiveCardProps) {
 
 export function Work() {
   return (
-    <section id="flavors" className="py-24 md:py-32 overflow-hidden">
+    <section id="flavors" className="py-24 md:py-36 overflow-hidden">
       <div className="container-midu">
         {/* Section Header */}
         <Reveal>
@@ -394,13 +543,13 @@ export function Work() {
           />
         </Reveal>
 
-        {/* Minimalist 3-Card Grid (Biograph style, borderless, seamless gap-0, rounded-2xl container) */}
-        <div className="mt-14 overflow-hidden rounded-2xl">
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-0">
-            {CARDS_DATA.map((palette, index) => (
-              <InteractiveCard key={index} palette={palette} />
-            ))}
-          </div>
+        {/* Vertical Stack with Staggered Alternating Rhythm */}
+        <div className="mt-20 md:mt-28 flex flex-col gap-24 sm:gap-28 lg:gap-36">
+          {FLAVORS_DATA.map((item) => (
+            <Reveal key={item.id} y={35}>
+              <FlavorRow item={item} />
+            </Reveal>
+          ))}
         </div>
       </div>
     </section>
