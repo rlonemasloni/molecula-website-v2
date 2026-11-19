@@ -1,5 +1,4 @@
 import React, { useEffect, useRef, useState, useCallback } from "react";
-import { ArrowUpRight, Sparkles } from "lucide-react";
 import { motion } from "framer-motion";
 import { Reveal, SectionTitle } from "./primitives";
 import bottleToxic from "@/assets/bottle-toxic.png";
@@ -477,47 +476,9 @@ function FlavorRow({ item }: { item: FlavorItem }) {
             </h3>
 
             {/* Description */}
-            <p className="text-sm sm:text-base leading-relaxed text-muted-foreground mb-6">
+            <p className="text-sm sm:text-base leading-relaxed text-muted-foreground">
               {item.description}
             </p>
-
-            {/* Flavor Notes */}
-            <div className="space-y-2 mb-6 pb-6 border-b border-border/60">
-              <div className="text-xs font-mono uppercase text-muted-foreground/70 mb-2 font-semibold">
-                Вкусовая пирамида:
-              </div>
-              {item.notes.map((note, idx) => (
-                <div
-                  key={idx}
-                  className="flex items-center gap-2.5 text-xs sm:text-sm font-medium text-foreground/90"
-                >
-                  <Sparkles className="size-3.5 text-purple-500 shrink-0" />
-                  <span>{note}</span>
-                </div>
-              ))}
-            </div>
-
-            {/* Tags & Action */}
-            <div className="flex flex-wrap items-center gap-2 mb-6">
-              {item.tags.map((tag, idx) => (
-                <span
-                  key={idx}
-                  className="px-2.5 py-1 rounded-md bg-secondary/80 text-[11px] font-mono text-secondary-foreground border border-border/40"
-                >
-                  {tag}
-                </span>
-              ))}
-            </div>
-
-            <div>
-              <a
-                href="#contact"
-                className="inline-flex items-center gap-2 text-sm font-bold text-foreground hover:text-purple-500 transition-colors group/link"
-              >
-                <span>Запросить рецептуру</span>
-                <ArrowUpRight className="size-4 group-hover/link:translate-x-0.5 group-hover/link:-translate-y-0.5 transition-transform" />
-              </a>
-            </div>
           </div>
         </motion.div>
       </div>
