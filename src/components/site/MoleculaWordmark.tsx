@@ -219,17 +219,17 @@ export function MoleculaStackedWordmarkSvg({
 
 function MoleculaHeroWordmark({ className = "" }: { className?: string }) {
   return (
-    <div className={`relative w-full select-none leading-none ${className}`}>
-      {/* Mobile-only Stacked 2-row Wordmark (MOLE / CULA) - Edge to edge, screen lighten blend mode */}
+    <div
+      className={`relative w-full select-none leading-none drop-shadow-[0_4px_16px_rgba(0,0,0,0.85)] drop-shadow-[0_0_35px_rgba(93,0,255,0.5)] ${className}`}
+    >
+      {/* Mobile-only Stacked 2-row Wordmark (MOLE / CULA) - Edge to edge */}
       <MoleculaStackedWordmarkSvg
-        style={{ mixBlendMode: "screen" }}
-        className="block sm:hidden w-full h-auto text-[#C4B5FD] select-none mix-blend-screen block align-bottom"
+        className="block sm:hidden w-full h-auto text-white select-none block align-bottom"
       />
 
-      {/* Desktop / Tablet Horizontal Wordmark - Edge to edge, screen lighten blend mode */}
+      {/* Desktop / Tablet Horizontal Wordmark - Edge to edge */}
       <MoleculaWordmarkSvg
-        style={{ mixBlendMode: "screen" }}
-        className="hidden sm:block w-full h-auto text-[#C4B5FD] select-none mix-blend-screen block align-bottom"
+        className="hidden sm:block w-full h-auto text-white select-none block align-bottom"
       />
       <span className="sr-only">MOLECULA</span>
     </div>

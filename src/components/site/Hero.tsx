@@ -28,13 +28,16 @@ export function Hero() {
           src="/Moleculawebcu.mp4"
         />
 
-        {/* Foreground Wordmark (Full width edge-to-edge, flush to bottom, screen blend mode) */}
+        {/* Ambient bottom vignette for pristine letter separation & cinematic depth */}
+        <div className="absolute inset-x-0 bottom-0 h-44 sm:h-60 md:h-72 bg-gradient-to-t from-black/85 via-black/35 to-transparent pointer-events-none z-[5]" />
+
+        {/* Foreground Wordmark (Full width edge-to-edge, flush to bottom, cinematic drop-shadows & aura) */}
         <motion.div
-          style={{ y: wordmarkY, mixBlendMode: "screen" }}
+          style={{ y: wordmarkY }}
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 1.0, ease: [0.22, 1, 0.36, 1] }}
-          className="relative z-10 w-full pointer-events-none px-0 pb-0 mb-0 leading-none mix-blend-screen"
+          className="relative z-10 w-full pointer-events-none px-0 pb-0 mb-0 leading-none"
         >
           <MoleculaWordmark variant="hero" className="w-full max-w-none block leading-none" />
         </motion.div>
