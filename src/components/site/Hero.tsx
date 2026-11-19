@@ -28,15 +28,15 @@ export function Hero() {
           src="/Moleculawebcu.mp4"
         />
 
-        {/* Foreground Wordmark (Purple with multiply blend mode) */}
+        {/* Foreground Wordmark (Full width edge-to-edge, flush to bottom, screen blend mode) */}
         <motion.div
-          style={{ y: wordmarkY, mixBlendMode: "multiply" }}
+          style={{ y: wordmarkY, mixBlendMode: "screen" }}
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 1.0, ease: [0.22, 1, 0.36, 1] }}
-          className="relative z-10 w-full pointer-events-none mix-blend-multiply px-3 sm:px-6 md:px-8 pb-3 sm:pb-6 md:pb-8"
+          className="relative z-10 w-full pointer-events-none px-0 pb-0 mb-0 leading-none mix-blend-screen"
         >
-          <MoleculaWordmark variant="hero" className="w-full max-w-none" />
+          <MoleculaWordmark variant="hero" className="w-full max-w-none block leading-none" />
         </motion.div>
       </div>
 

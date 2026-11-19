@@ -194,7 +194,7 @@ export function MoleculaStackedWordmarkSvg({
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      viewBox="0 0 294 156"
+      viewBox="0 0 294 154"
       className={className}
       style={style}
       fill="currentColor"
@@ -219,17 +219,17 @@ export function MoleculaStackedWordmarkSvg({
 
 function MoleculaHeroWordmark({ className = "" }: { className?: string }) {
   return (
-    <div className={`relative w-full select-none ${className}`}>
-      {/* Mobile-only Stacked 2-row Wordmark (MOLE / CULA) */}
+    <div className={`relative w-full select-none leading-none ${className}`}>
+      {/* Mobile-only Stacked 2-row Wordmark (MOLE / CULA) - Edge to edge, screen lighten blend mode */}
       <MoleculaStackedWordmarkSvg
-        style={{ mixBlendMode: "multiply" }}
-        className="block sm:hidden w-full max-w-[280px] xs:max-w-[320px] mx-auto h-auto text-[#5D00FF] opacity-92 select-none mix-blend-multiply drop-shadow-sm pb-1"
+        style={{ mixBlendMode: "screen" }}
+        className="block sm:hidden w-full h-auto text-[#C4B5FD] select-none mix-blend-screen block align-bottom"
       />
 
-      {/* Desktop / Tablet Horizontal Wordmark */}
+      {/* Desktop / Tablet Horizontal Wordmark - Edge to edge, screen lighten blend mode */}
       <MoleculaWordmarkSvg
-        style={{ mixBlendMode: "multiply" }}
-        className="hidden sm:block w-full h-auto text-[#5D00FF] opacity-92 select-none mix-blend-multiply drop-shadow-sm"
+        style={{ mixBlendMode: "screen" }}
+        className="hidden sm:block w-full h-auto text-[#C4B5FD] select-none mix-blend-screen block align-bottom"
       />
       <span className="sr-only">MOLECULA</span>
     </div>
