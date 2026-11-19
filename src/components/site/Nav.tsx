@@ -36,6 +36,35 @@ export function Nav() {
     return "dark";
   });
 
+  // Automatically close header when scrolling down
+  useEffect(() => {
+    let lastScrollY = window.scrollY;
+
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY;
+      if (currentScrollY > lastScrollY + 4) {
+        setIsOpen(false);
+      }
+      lastScrollY = currentScrollY;
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  // Close when tapping outside on mobile
+  useEffect(() => {
+    if (!isOpen) return;
+    const handleClickOutside = (e: MouseEvent | TouchEvent) => {
+      const navEl = document.getElementById("main-nav-pill");
+      if (navEl && !navEl.contains(e.target as Node)) {
+        setIsOpen(false);
+      }
+    };
+    document.addEventListener("pointerdown", handleClickOutside);
+    return () => document.removeEventListener("pointerdown", handleClickOutside);
+  }, [isOpen]);
+
   useEffect(() => {
     if (theme === "dark") {
       document.documentElement.classList.add("dark");
@@ -53,6 +82,7 @@ export function Nav() {
   return (
     <header className="pointer-events-none fixed inset-x-0 top-4 z-50 flex justify-center px-4 sm:top-5">
       <motion.div
+        id="main-nav-pill"
         onMouseEnter={() => setIsOpen(true)}
         onMouseLeave={() => setIsOpen(false)}
         initial={{ opacity: 0, y: -14 }}

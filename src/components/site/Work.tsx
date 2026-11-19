@@ -429,30 +429,66 @@ function FlavorRow({ item }: { item: FlavorItem }) {
       {/* ========================================================
           CONTENT CONTAINER (Centered max-w-5xl, PNG bottle in place)
          ======================================================== */}
-      <div className="relative z-10 w-full max-w-5xl mx-auto px-4 sm:px-6">
-        <div className="grid grid-cols-1 lg:grid-cols-2 items-center gap-10 sm:gap-14 lg:gap-12 min-h-[440px] lg:min-h-[480px]">
+      <div className="relative z-10 w-full max-w-5xl mx-auto px-0 lg:px-6">
+        {/* MOBILE-ONLY TITLE (Renders ABOVE the card on mobile) */}
+        <motion.div
+          initial={{ opacity: 0, y: 15 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-60px" }}
+          transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+          className="block lg:hidden w-full px-5 sm:px-6 mb-5 text-left"
+        >
+          <div className="flex items-center gap-3">
+            <span className="font-mono text-xs font-bold px-2.5 py-0.5 rounded-full bg-white/10 text-muted-foreground border border-white/10">
+              {item.number}
+            </span>
+            <h3 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-foreground uppercase leading-[1.1]">
+              {item.title}
+            </h3>
+          </div>
+        </motion.div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-2 items-center gap-8 sm:gap-12 lg:gap-12 min-h-[auto] lg:min-h-[480px]">
           {/* ========================================================
-              PNG BOTTLE SLOT (Stays in its exact grid column!)
+              PNG BOTTLE & CARD SLOT
              ======================================================== */}
           <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true, margin: "-60px" }}
             transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-            className={`relative z-20 w-full flex justify-center items-center ${
-              isAlignRight ? "order-1 lg:order-2" : "order-1 lg:order-1"
+            className={`relative z-20 w-full flex ${
+              isAlignRight
+                ? "order-1 lg:order-2 justify-end lg:justify-center"
+                : "order-1 lg:order-1 justify-start lg:justify-center"
             }`}
           >
-            <div className="group relative w-full max-w-[340px] sm:max-w-[400px] lg:max-w-[440px] aspect-square flex items-center justify-center cursor-pointer">
-              {/* Mobile-only background square (desktop uses bleed background) */}
-              <div className="lg:hidden absolute inset-0 rounded-[2.25rem] overflow-hidden">
+            <div
+              className={`group relative w-[88vw] max-w-[340px] sm:max-w-[380px] lg:max-w-[440px] aspect-square flex items-center justify-center cursor-pointer ${
+                isAlignRight
+                  ? "ml-auto mr-0 lg:mx-auto"
+                  : "mr-auto ml-0 lg:mx-auto"
+              }`}
+            >
+              {/* Mobile-only background: bleeds to screen edge on mobile */}
+              <div
+                className={`lg:hidden absolute inset-0 overflow-hidden ${
+                  isAlignRight
+                    ? "rounded-l-[2.5rem] rounded-r-none"
+                    : "rounded-r-[2.5rem] rounded-l-none"
+                }`}
+              >
                 <WebGLSquare
                   palette={item.palette}
                   isHovered={isHovered}
                   onPointerEnter={() => setIsHovered(true)}
                   onPointerMove={() => setIsHovered(true)}
                   onPointerLeave={() => setIsHovered(false)}
-                  className="rounded-[2.25rem]"
+                  className={
+                    isAlignRight
+                      ? "rounded-l-[2.5rem] rounded-r-none"
+                      : "rounded-r-[2.5rem] rounded-l-none"
+                  }
                 />
               </div>
 
@@ -469,8 +505,8 @@ function FlavorRow({ item }: { item: FlavorItem }) {
                 />
               </div>
 
-              {/* Accent Badge on top of the bottle area */}
-              <div className="absolute top-5 left-5 z-40 flex items-center gap-2 pointer-events-none">
+              {/* Accent Badge on top of the bottle area (desktop only) */}
+              <div className="hidden lg:flex absolute top-5 left-5 z-40 items-center gap-2 pointer-events-none">
                 <span className="font-mono text-xs font-bold px-3 py-1 rounded-full bg-black/40 backdrop-blur-md text-white border border-white/20">
                   {item.number}
                 </span>
@@ -486,20 +522,20 @@ function FlavorRow({ item }: { item: FlavorItem }) {
             whileInView={{ opacity: 1, x: 0, y: 0 }}
             viewport={{ once: true, margin: "-60px" }}
             transition={{ duration: 0.8, delay: 0.15, ease: [0.16, 1, 0.3, 1] }}
-            className={`w-full max-w-[460px] mx-auto lg:mx-0 ${
+            className={`w-full max-w-[460px] mx-auto lg:mx-0 px-5 sm:px-6 lg:px-0 ${
               isAlignRight
                 ? "order-2 lg:order-1 lg:pr-4"
                 : "order-2 lg:order-2 lg:pl-4"
             }`}
           >
-            <div className="p-2 sm:p-4 text-left">
-              {/* Title */}
-              <h3 className="text-3xl sm:text-4xl lg:text-[2.65rem] font-extrabold tracking-tight text-foreground mb-4 leading-[1.15]">
+            <div className="text-left">
+              {/* Desktop-only Title */}
+              <h3 className="hidden lg:block text-3xl sm:text-4xl lg:text-[2.65rem] font-extrabold tracking-tight text-foreground mb-4 leading-[1.15]">
                 {item.title}
               </h3>
 
               {/* Description */}
-              <p className="text-sm sm:text-base leading-relaxed text-muted-foreground">
+              <p className="text-sm sm:text-base leading-relaxed text-muted-foreground mt-2 lg:mt-0">
                 {item.description}
               </p>
             </div>
