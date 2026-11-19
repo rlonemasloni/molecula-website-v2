@@ -184,12 +184,52 @@ export function MoleculaWordmarkSvg({
   );
 }
 
+export function MoleculaStackedWordmarkSvg({
+  className = "",
+  style,
+}: {
+  className?: string;
+  style?: React.CSSProperties;
+}) {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 294 156"
+      className={className}
+      style={style}
+      fill="currentColor"
+    >
+      {/* ROW 1: M O L E */}
+      <g>
+        <polygon points="15.28 78 0 78 0 2 15.08 2 38.05 41.63 61.02 2 76 2 76 78 60.82 78 60.82 32.66 46.82 56.81 59.14 78 41.6 78 38.05 71.89 34.5 78 16.95 78 29.28 56.81 15.28 32.66 15.28 78" />
+        <path d="M124,15.19c-13.57,0-24.64,11.05-24.64,24.86s11.17,24.76,24.64,24.76,24.64-10.46,24.64-24.76-10.97-24.86-24.64-24.86ZM124,80c-22.14,0-40-17.85-40-39.95S101.46,0,124,0s40,17.76,40,40.05-17.56,39.95-40,39.95Z" />
+        <polygon points="225 78 172 78 172 2 187.11 2 187.11 63 209.89 63 209.89 48 225 48 225 78" />
+        <polygon points="291 17 250 17 250 32 287 32 287 48 250 48 250 63 291 63 291 78 235 78 235 2 291 2 291 17" />
+      </g>
+      {/* ROW 2: C U L A */}
+      <g transform="translate(-299, 76)">
+        <path d="M356.52,21.97c-4.56-4.38-10.78-7.07-17.63-7.07-14.01,0-25.36,11.26-25.36,25.15s11.35,25.15,25.36,25.15c9.75,0,18.22-5.46,22.46-13.47l10.65,10.8c-7.16,10.95-19.79,17.46-33.12,17.46-21.98,0-39.88-17.66-39.88-39.95S316.8,0,338.88,0c10.74,0,20.69,4.04,28.25,11.54l-10.61,10.43Z" />
+        <path d="M412.55,80c-19.02,0-32.55-13.51-32.55-32.64V2h22v14h-6.8v31.36c0,10.26,7.16,17.45,17.35,17.45s17.35-7.2,17.35-17.45v-31.36h-6.9V2h22v45.36c0,19.13-13.43,32.64-32.45,32.64Z" />
+        <polygon points="508 78 455 78 455 2 470.11 2 470.11 63 492.89 63 492.89 48 508 48 508 78" />
+        <polygon points="576.44 78 553.05 23.59 529.65 78 513 78 545.71 2 560.39 2 593 78 576.44 78" />
+      </g>
+    </svg>
+  );
+}
+
 function MoleculaHeroWordmark({ className = "" }: { className?: string }) {
   return (
     <div className={`relative w-full select-none ${className}`}>
+      {/* Mobile-only Stacked 2-row Wordmark (MOLE / CULA) */}
+      <MoleculaStackedWordmarkSvg
+        style={{ mixBlendMode: "multiply" }}
+        className="block sm:hidden w-full max-w-[280px] xs:max-w-[320px] mx-auto h-auto text-[#5D00FF] opacity-92 select-none mix-blend-multiply drop-shadow-sm pb-1"
+      />
+
+      {/* Desktop / Tablet Horizontal Wordmark */}
       <MoleculaWordmarkSvg
         style={{ mixBlendMode: "multiply" }}
-        className="w-full h-auto text-[#5D00FF] opacity-92 select-none block mix-blend-multiply drop-shadow-sm"
+        className="hidden sm:block w-full h-auto text-[#5D00FF] opacity-92 select-none mix-blend-multiply drop-shadow-sm"
       />
       <span className="sr-only">MOLECULA</span>
     </div>
