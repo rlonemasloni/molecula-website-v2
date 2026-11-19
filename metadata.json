@@ -1,0 +1,6 @@
+{
+  "name": "Clean Starter Project",
+  "description": "Clean blank starter project ready for GitHub synchronization.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
