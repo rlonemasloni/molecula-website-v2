@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useState, useCallback } from "react";
 import { motion } from "framer-motion";
-import { Reveal, SectionTitle } from "./primitives";
 import bottleToxic from "@/assets/bottle-toxic.png";
 import bottleHalls from "@/assets/bottle-halls.png";
 
@@ -513,19 +512,9 @@ function FlavorRow({ item }: { item: FlavorItem }) {
 
 export function Work() {
   return (
-    <section id="flavors" className="py-24 md:py-36 overflow-hidden relative">
-      <div className="container-midu">
-        {/* Section Header */}
-        <Reveal>
-          <SectionTitle
-            lead="Коллекции вкусов."
-            trail="Флагманские линейки чистой вкусопередачи."
-          />
-        </Reveal>
-      </div>
-
+    <section id="flavors" className="py-20 md:py-32 overflow-hidden relative">
       {/* Vertical Stack with Staggered Alternating Rhythm and Bleed Edges */}
-      <div className="mt-20 md:mt-28 flex flex-col gap-24 sm:gap-32 lg:gap-36 w-full">
+      <div className="flex flex-col gap-24 sm:gap-32 lg:gap-36 w-full">
         {FLAVORS_DATA.map((item) => (
           <FlavorRow key={item.id} item={item} />
         ))}
