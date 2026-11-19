@@ -127,44 +127,37 @@ export function Nav() {
                 ))}
               </nav>
 
-              {/* Theme Switcher at bottom of header */}
-              <div className="border-t border-white/10 bg-white/[0.04] px-5 py-3.5 flex items-center justify-between">
-                <div className="flex items-center gap-2.5">
-                  <span className="flex size-7 items-center justify-center rounded-full bg-white/10 text-white">
-                    {theme === "dark" ? (
-                      <Moon className="size-3.5 text-purple-400" />
-                    ) : (
-                      <Sun className="size-3.5 text-amber-300" />
-                    )}
-                  </span>
-                  <div className="flex flex-col">
-                    <span className="text-xs font-medium text-white">
-                      {theme === "dark" ? "Тёмная тема" : "Светлая тема"}
-                    </span>
-                    <span className="text-[10px] text-white/45">
-                      {theme === "dark" ? "Чёрный фон" : "Светлый фон"}
-                    </span>
-                  </div>
-                </div>
+              {/* Centered Apple-style iOS Theme Toggle Switch */}
+              <div className="border-t border-white/10 bg-white/[0.03] px-5 py-4 flex items-center justify-center gap-3.5">
+                <Sun
+                  className={`size-4 transition-colors duration-200 ${
+                    theme === "light" ? "text-amber-400" : "text-white/35"
+                  }`}
+                />
 
                 <button
                   type="button"
-                  onClick={toggleTheme}
+                  role="switch"
+                  aria-checked={theme === "dark"}
                   aria-label="Переключить тему оформления"
-                  className="flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-3.5 py-1.5 text-xs font-semibold tracking-tight text-white transition-all hover:bg-white/20 hover:border-white/30 active:scale-95 cursor-pointer"
+                  onClick={toggleTheme}
+                  className={`relative inline-flex h-[30px] w-[50px] shrink-0 cursor-pointer rounded-full p-[2px] transition-colors duration-300 ease-in-out focus:outline-none ${
+                    theme === "dark" ? "bg-[#5D00FF]" : "bg-white/30"
+                  }`}
                 >
-                  {theme === "dark" ? (
-                    <>
-                      <Sun className="size-3.5 text-amber-300" />
-                      <span>Светлая</span>
-                    </>
-                  ) : (
-                    <>
-                      <Moon className="size-3.5 text-purple-400" />
-                      <span>Тёмная</span>
-                    </>
-                  )}
+                  <span className="sr-only">Переключить тему</span>
+                  <span
+                    className={`pointer-events-none inline-block size-[26px] rounded-full bg-white shadow-[0_2px_4px_rgba(0,0,0,0.3)] transition-transform duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+                      theme === "dark" ? "translate-x-5" : "translate-x-0"
+                    }`}
+                  />
                 </button>
+
+                <Moon
+                  className={`size-4 transition-colors duration-200 ${
+                    theme === "dark" ? "text-purple-300" : "text-white/35"
+                  }`}
+                />
               </div>
             </motion.div>
           )}
