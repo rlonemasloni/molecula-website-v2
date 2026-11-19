@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState, useCallback } from "react";
 import { motion } from "framer-motion";
+import logoLeggo from "@/assets/logo-leggo.svg";
 import bottleLeggo from "@/assets/bottle-leggo.png";
 import bottleToxic from "@/assets/bottle-toxic.png";
 import bottleHalls from "@/assets/bottle-halls.png";
@@ -8,6 +9,7 @@ interface FlavorItem {
   id: string;
   number: string;
   title: string;
+  logo?: string;
   category: string;
   description: string;
   notes: string[];
@@ -28,6 +30,7 @@ const FLAVORS_DATA: FlavorItem[] = [
     id: "leggo",
     number: "01",
     title: "LEGGO",
+    logo: logoLeggo,
     category: "Сладкая десертно-ягодная коллекция",
     description:
       "Большая флагманская коллекция выразительных сладких вкусов. Богатая палитра спелых ягод, сочных десертных и фруктовых сочетаний с выверенной сладостью и безупречной чистотой вкусопередачи.",
@@ -443,9 +446,17 @@ function FlavorRow({ item }: { item: FlavorItem }) {
             <span className="font-mono text-xs font-bold px-2.5 py-0.5 rounded-full bg-white/10 text-muted-foreground border border-white/10">
               {item.number}
             </span>
-            <h3 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-foreground uppercase leading-[1.1]">
-              {item.title}
-            </h3>
+            {item.logo ? (
+              <img
+                src={item.logo}
+                alt={item.title}
+                className="h-10 sm:h-12 w-auto object-contain select-none"
+              />
+            ) : (
+              <h3 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-foreground uppercase leading-[1.1]">
+                {item.title}
+              </h3>
+            )}
           </div>
         </motion.div>
 
@@ -530,10 +541,20 @@ function FlavorRow({ item }: { item: FlavorItem }) {
             }`}
           >
             <div className="text-left">
-              {/* Desktop-only Title */}
-              <h3 className="hidden lg:block text-3xl sm:text-4xl lg:text-[2.65rem] font-extrabold tracking-tight text-foreground mb-4 leading-[1.15]">
-                {item.title}
-              </h3>
+              {/* Desktop-only Title or SVG Logo */}
+              {item.logo ? (
+                <div className="hidden lg:block mb-5">
+                  <img
+                    src={item.logo}
+                    alt={item.title}
+                    className="h-12 lg:h-14 xl:h-16 w-auto object-contain select-none"
+                  />
+                </div>
+              ) : (
+                <h3 className="hidden lg:block text-3xl sm:text-4xl lg:text-[2.65rem] font-extrabold tracking-tight text-foreground mb-4 leading-[1.15]">
+                  {item.title}
+                </h3>
+              )}
 
               {/* Description */}
               <p className="text-sm sm:text-base leading-relaxed text-muted-foreground mt-2 lg:mt-0">
