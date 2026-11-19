@@ -65,10 +65,10 @@ const FLAVORS_DATA: FlavorItem[] = [
   {
     id: "halls",
     number: "03",
-    title: "ХОЛС · ЧЕРНИКА",
+    title: "ХОЛС",
     category: "Ледяная лесная черника с морозным кулером",
     description:
-      "Освежающая классика фармацевтического стандарта USP. Спелая дикая черника с безупречно чистым леденящим вдохом и благородными ментоловыми нотами, сохраняющими спирали и хлопок чистыми в 2.5 раза дольше.",
+      "Освежающая классика фармацевтического стандарта USP. Спелая дикая черника с безупречно чистым леденящим вдохом и благородными ментоловыми нотами, сохраняющими кристальную чистоту и свежесть вкуса.",
     notes: ["Лесная морозная черника", "Кристаллический ментол USP", "Арктический кулер"],
     tags: ["Кристаллический кулер", "USP Фармакопея", "Дозировка: 3–5%"],
     bottle: bottleHalls,
@@ -494,17 +494,6 @@ function FlavorRow({ item }: { item: FlavorItem }) {
             }`}
           >
             <div className="p-2 sm:p-4 text-left">
-              {/* Category tag */}
-              <div className="flex items-center gap-2 mb-3">
-                <span
-                  className="size-2 rounded-full"
-                  style={{ backgroundColor: item.accentColor }}
-                />
-                <span className="font-mono text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-                  {item.category}
-                </span>
-              </div>
-
               {/* Title */}
               <h3 className="text-3xl sm:text-4xl lg:text-[2.65rem] font-extrabold tracking-tight text-foreground mb-4 leading-[1.15]">
                 {item.title}

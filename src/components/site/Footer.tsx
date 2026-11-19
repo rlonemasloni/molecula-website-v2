@@ -25,7 +25,7 @@ export function Footer() {
               <MoleculaLogo height={20} />
             </div>
             <p className="text-xs leading-relaxed text-muted-foreground">
-              Производство высокоочищенных пищевых ароматизаторов для безникотинового вейпинга и миксологии. 0% никотина. 100% пищевая чистота.
+              Производство высокоочищенных пищевых ароматизаторов премиального стандарта и миксологии. 100% пищевая чистота.
             </p>
             <p className="mt-4 font-mono text-[11px] text-muted-foreground/60">
               © {new Date().getFullYear()} MOLECULA. Все права защищены.
