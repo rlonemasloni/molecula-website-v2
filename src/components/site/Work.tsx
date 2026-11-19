@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState, useCallback } from "react";
-import { motion } from "framer-motion";
+import { motion, useInView } from "framer-motion";
 import logoLeggo from "@/assets/logo-leggo.svg";
 import bottleLeggo from "@/assets/bottle-leggo.png";
 import bottleToxic from "@/assets/bottle-toxic.png";
@@ -343,6 +343,13 @@ function WebGLSquare({
   }, [palette]);
 
   const handleLocalPointerEnter = (e: React.PointerEvent<HTMLDivElement>) => {
+    // Disable interactive pointer reaction on mobile/touch screens so it floats autonomously
+    if (
+      typeof window !== "undefined" &&
+      (window.matchMedia("(pointer: coarse)").matches || window.innerWidth < 1024)
+    ) {
+      return;
+    }
     const rect = e.currentTarget.getBoundingClientRect();
     const x = (e.clientX - rect.left) / rect.width;
     const y = 1.0 - (e.clientY - rect.top) / rect.height;
@@ -353,6 +360,12 @@ function WebGLSquare({
   };
 
   const handleLocalPointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
+    if (
+      typeof window !== "undefined" &&
+      (window.matchMedia("(pointer: coarse)").matches || window.innerWidth < 1024)
+    ) {
+      return;
+    }
     const rect = e.currentTarget.getBoundingClientRect();
     const x = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
     const y = Math.max(
@@ -393,7 +406,12 @@ function WebGLSquare({
 
 function FlavorRow({ item }: { item: FlavorItem }) {
   const [isHovered, setIsHovered] = useState(false);
+  const cardRef = useRef<HTMLDivElement>(null);
+  const isInView = useInView(cardRef, {
+    margin: "-25% 0px -25% 0px",
+  });
   const isAlignRight = item.align === "right";
+  const isElevated = isHovered || isInView;
 
   return (
     <div
@@ -418,7 +436,7 @@ function FlavorRow({ item }: { item: FlavorItem }) {
       >
         <WebGLSquare
           palette={item.palette}
-          isHovered={isHovered}
+          isHovered={isElevated}
           onPointerEnter={() => setIsHovered(true)}
           onPointerMove={() => setIsHovered(true)}
           onPointerLeave={() => setIsHovered(false)}
@@ -476,6 +494,7 @@ function FlavorRow({ item }: { item: FlavorItem }) {
             }`}
           >
             <div
+              ref={cardRef}
               className={`group relative w-[88vw] max-w-[340px] sm:max-w-[380px] lg:max-w-[440px] aspect-square flex items-center justify-center cursor-pointer ${
                 isAlignRight
                   ? "ml-auto mr-0 lg:mx-auto"
@@ -492,7 +511,7 @@ function FlavorRow({ item }: { item: FlavorItem }) {
               >
                 <WebGLSquare
                   palette={item.palette}
-                  isHovered={isHovered}
+                  isHovered={isElevated}
                   onPointerEnter={() => setIsHovered(true)}
                   onPointerMove={() => setIsHovered(true)}
                   onPointerLeave={() => setIsHovered(false)}
@@ -510,8 +529,8 @@ function FlavorRow({ item }: { item: FlavorItem }) {
                   src={item.bottle}
                   alt={item.title}
                   className={`h-[114%] max-h-[500px] w-auto object-contain transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] select-none ${
-                    isHovered
-                      ? "scale-105 -translate-y-3 drop-shadow-[0_16px_28px_rgba(0,0,0,0.26)]"
+                    isElevated
+                      ? "scale-105 -translate-y-3 drop-shadow-[0_18px_30px_rgba(0,0,0,0.28)]"
                       : "scale-100 translate-y-0 drop-shadow-[0_10px_18px_rgba(0,0,0,0.18)]"
                   }`}
                 />
@@ -557,7 +576,7 @@ function FlavorRow({ item }: { item: FlavorItem }) {
               )}
 
               {/* Description */}
-              <p className="text-sm sm:text-base leading-relaxed text-muted-foreground mt-2 lg:mt-0">
+              <p className="font-editorial text-base sm:text-lg lg:text-xl leading-[1.65] sm:leading-[1.6] text-muted-foreground/90 font-normal tracking-normal mt-2 lg:mt-0">
                 {item.description}
               </p>
             </div>

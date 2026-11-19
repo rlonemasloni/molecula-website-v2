@@ -32,40 +32,81 @@ export function Contact() {
     <section id="contact" className="py-20 md:py-28 overflow-hidden">
       <div className="container-midu">
         <Reveal>
-          {/* Main Rectangular Card with Rich Purple Background & Shimmering Ambient Light */}
-          <div className="relative rounded-3xl overflow-hidden p-3 sm:p-4 lg:p-4 bg-gradient-to-br from-[#4C1D95] via-[#6D28D9] to-[#3B0764] shadow-2xl shadow-purple-950/25 border border-purple-500/20">
-            {/* Base ambient lighting */}
-            <div className="absolute -top-24 -left-24 size-80 bg-[#8B5CF6]/35 blur-3xl rounded-full pointer-events-none" />
-            <div className="absolute -bottom-24 left-1/3 size-80 bg-[#A855F7]/30 blur-3xl rounded-full pointer-events-none" />
-
-            {/* Slow-shifting soft white & purple iridescent shimmer */}
+          {/* Main Rectangular Card with Rich Purple Background & Vivid Animated Gradient */}
+          <div className="relative rounded-3xl overflow-hidden p-3 sm:p-4 lg:p-4 bg-gradient-to-br from-[#3B0764] via-[#581C87] to-[#1E053A] shadow-2xl shadow-purple-950/40 border border-purple-400/30">
+            {/* Dynamic Moving Gradient Mesh Background */}
             <motion.div
               animate={{
-                x: ["-8%", "18%", "-12%", "-8%"],
-                y: ["-10%", "12%", "18%", "-10%"],
-                scale: [1, 1.15, 0.92, 1],
-                opacity: [0.22, 0.35, 0.2, 0.22],
+                backgroundPosition: ["0% 0%", "100% 100%", "0% 100%", "100% 0%", "0% 0%"],
               }}
               transition={{
-                duration: 11,
+                duration: 16,
                 repeat: Infinity,
-                ease: "easeInOut",
+                ease: "linear",
               }}
-              className="absolute -top-1/4 -left-1/4 w-[130%] h-[130%] bg-[radial-gradient(ellipse_at_35%_45%,rgba(255,255,255,0.45)_0%,rgba(216,180,254,0.25)_25%,rgba(139,92,246,0.15)_50%,transparent_70%)] blur-2xl pointer-events-none"
+              className="absolute inset-0 bg-[radial-gradient(circle_at_20%_30%,#7C3AED_0%,transparent_50%),radial-gradient(circle_at_80%_70%,#C026D3_0%,transparent_55%),radial-gradient(circle_at_50%_20%,#4F46E5_0%,transparent_45%),radial-gradient(circle_at_70%_30%,#A855F7_0%,transparent_50%)] bg-[length:200%_200%] opacity-80 pointer-events-none"
             />
+
+            {/* Glowing Luminous Orb 1 - Vivid Violet/Lavender */}
             <motion.div
               animate={{
-                x: ["10%", "-15%", "8%", "10%"],
-                y: ["12%", "-8%", "-15%", "12%"],
-                scale: [1.05, 0.95, 1.12, 1.05],
-                opacity: [0.18, 0.28, 0.16, 0.18],
+                x: ["-10%", "25%", "-15%", "-10%"],
+                y: ["-15%", "20%", "30%", "-15%"],
+                scale: [1, 1.35, 0.95, 1],
+                opacity: [0.65, 0.9, 0.55, 0.65],
               }}
               transition={{
-                duration: 14,
+                duration: 8,
                 repeat: Infinity,
                 ease: "easeInOut",
               }}
-              className="absolute -bottom-1/4 -right-1/4 w-[120%] h-[120%] bg-[radial-gradient(circle_at_60%_55%,rgba(255,255,255,0.38)_0%,rgba(192,132,252,0.2)_30%,transparent_65%)] blur-2xl pointer-events-none"
+              className="absolute -top-12 -left-12 size-96 bg-[radial-gradient(circle,rgba(168,85,247,0.7)_0%,rgba(124,58,237,0.4)_40%,transparent_70%)] blur-2xl rounded-full pointer-events-none"
+            />
+
+            {/* Glowing Luminous Orb 2 - Electric Magenta/Fuchsia */}
+            <motion.div
+              animate={{
+                x: ["15%", "-20%", "10%", "15%"],
+                y: ["20%", "-10%", "-20%", "20%"],
+                scale: [1.1, 0.85, 1.3, 1.1],
+                opacity: [0.55, 0.85, 0.5, 0.55],
+              }}
+              transition={{
+                duration: 10,
+                repeat: Infinity,
+                ease: "easeInOut",
+              }}
+              className="absolute -bottom-16 left-1/4 size-96 bg-[radial-gradient(circle,rgba(217,70,239,0.65)_0%,rgba(192,38,211,0.35)_45%,transparent_70%)] blur-2xl rounded-full pointer-events-none"
+            />
+
+            {/* Glowing Luminous Orb 3 - Radiant Indigo/Violet Shimmer */}
+            <motion.div
+              animate={{
+                x: ["-5%", "15%", "-20%", "-5%"],
+                y: ["10%", "-15%", "15%", "10%"],
+                scale: [0.95, 1.25, 1, 0.95],
+                opacity: [0.5, 0.8, 0.45, 0.5],
+              }}
+              transition={{
+                duration: 12,
+                repeat: Infinity,
+                ease: "easeInOut",
+              }}
+              className="absolute top-1/4 right-1/3 size-80 bg-[radial-gradient(circle,rgba(129,140,248,0.6)_0%,rgba(99,102,241,0.3)_40%,transparent_70%)] blur-3xl rounded-full pointer-events-none"
+            />
+
+            {/* Diagonal Sweeping Soft Iridescent Sheen */}
+            <motion.div
+              animate={{
+                x: ["-100%", "200%"],
+              }}
+              transition={{
+                duration: 6,
+                repeat: Infinity,
+                ease: "easeInOut",
+                repeatDelay: 2,
+              }}
+              className="absolute inset-y-0 w-1/2 bg-gradient-to-r from-transparent via-white/15 to-transparent skew-x-[-25deg] pointer-events-none"
             />
 
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-center">
