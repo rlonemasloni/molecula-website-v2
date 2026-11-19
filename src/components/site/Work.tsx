@@ -395,7 +395,7 @@ function FlavorRow({ item }: { item: FlavorItem }) {
     <div
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
-      className="relative w-full overflow-hidden py-4 lg:py-6"
+      className="relative w-full py-8 lg:py-12"
     >
       {/* ========================================================
           DESKTOP FULL-BLEED GRADIENT RECTANGLE
@@ -406,7 +406,7 @@ function FlavorRow({ item }: { item: FlavorItem }) {
         whileInView={{ opacity: 1, x: 0 }}
         viewport={{ once: true, margin: "-60px" }}
         transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-        className={`hidden lg:block absolute inset-y-4 lg:inset-y-6 z-0 pointer-events-auto ${
+        className={`hidden lg:block absolute inset-y-6 lg:inset-y-8 z-0 pointer-events-auto ${
           isAlignRight
             ? "right-0 left-[calc(50%+1.5rem)]"
             : "left-0 right-[calc(50%+1.5rem)]"
@@ -456,15 +456,15 @@ function FlavorRow({ item }: { item: FlavorItem }) {
                 />
               </div>
 
-              {/* PNG Bottle positioned above with 3D overflow */}
+              {/* PNG Bottle positioned above with natural proportion & clean soft shadow */}
               <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-30">
                 <img
                   src={item.bottle}
                   alt={item.title}
-                  className={`h-[128%] max-h-[560px] w-auto object-contain transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] select-none ${
+                  className={`h-[114%] max-h-[500px] w-auto object-contain transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] select-none ${
                     isHovered
-                      ? "scale-110 -translate-y-4 drop-shadow-[0_32px_44px_rgba(0,0,0,0.7)]"
-                      : "scale-100 translate-y-0 drop-shadow-[0_18px_30px_rgba(0,0,0,0.45)]"
+                      ? "scale-105 -translate-y-3 drop-shadow-[0_16px_28px_rgba(0,0,0,0.26)]"
+                      : "scale-100 translate-y-0 drop-shadow-[0_10px_18px_rgba(0,0,0,0.18)]"
                   }`}
                 />
               </div>
